@@ -6,37 +6,41 @@ import { useDispatch, useSelector } from "react-redux";
 function App() {
   const url = `https://zoom.us/oauth/authorize?response_type=code&client_id=${process.env.REACT_APP_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_HOST_URL}`;
   const urlParams = new URLSearchParams(window.location.search);
-  const apiUrl = process.env.REACT_APP_API_URL
+  const apiUrl = process.env.REACT_APP_API_URL;
   const code = urlParams.get("code");
   const user = useSelector((state) => state.auth.currentUser);
   const dispatch = useDispatch();
-  useEffect(() => {
-    if (code && !user) {
-      axios
-        .get(`${apiUrl}/token/${code}`)
-        .then((res) => {
-          const { access_token } = res.data;
-          localStorage.setItem("accessToken", JSON.stringify(access_token));
-          axios
-            .post(`${apiUrl}/profile`, {
-              accessToken: access_token,
-            })
-            .then((res) => {
-              const data = res.data;
-              console.log("User", data);
-              localStorage.setItem("user", JSON.stringify(data));
-              const action = userLoginSuccess(data);
-              dispatch(action);
-            });
-        })
-        .catch((error) => console.log(error));
-    }
-  }, [code]);
+  useEffect(
+    () => {
+      // if (code && !user) {
+      //   axios
+      //     .get(`${apiUrl}/token/${code}`)
+      //     .then((res) => {
+      //       const { access_token } = res.data;
+      //       localStorage.setItem("accessToken", JSON.stringify(access_token));
+      //       axios
+      //         .post(`${apiUrl}/profile`, {
+      //           accessToken: access_token,
+      //         })
+      //         .then((res) => {
+      //           const data = res.data;
+      //           console.log("User", data);
+      //           localStorage.setItem("user", JSON.stringify(data));
+      //           const action = userLoginSuccess(data);
+      //           dispatch(action);
+      //         });
+      //     })
+      //     .catch((error) => console.log(error));
+      // }
+    },
+    [
+      /*code*/
+    ]
+  );
   function handleChange(event) {
     console.log(event.target.files[0]);
-    let image = document.getElementById("image")
+    let image = document.getElementById("image");
     image.src = URL.createObjectURL(event.target.files[0]);
-    
   }
   function handleClick() {
     const logoutAction = userLogout();
